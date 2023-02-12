@@ -90,82 +90,67 @@ bool game_update(game* g)
     printf("Black stone's turn, please enter a move: ");
         //if coord is valid or "EOF value"
         if (scanf("%s", formalCoord) != EOF ) {
-            if(strcmp(formalCoord, "EOF") == 0){
-                printf("The game is stopped.");
-                printf("\n");
-                (*g).state = GAME_STATE_STOPPED;
-                result = false;
-                return result;
-            }
-
+            
         resultCode = board_coord((*g).board, formalCoord, &(m1.x), &(m1.y) );
 
-        while (resultCode == FORMAL_COORDINATE_ERR) {
-            printf("The coordinate you entered is invalid, please try again.\n");
-            printf("Black stone's turn, please enter a move: ");
-            scanf("%s", formalCoord);
+            while (resultCode == FORMAL_COORDINATE_ERR) {
+                printf("The coordinate you entered is invalid, please try again.\n");
+                printf("Black stone's turn, please enter a move: ");
+                scanf("%s", formalCoord);
 
-            if(strcmp(formalCoord, "EOF") == 0){
-                printf("The game is stopped.");
-                printf("\n");
-                (*g).state = GAME_STATE_STOPPED;
-                result = false;
-                return result;
+                resultCode = board_coord((*g).board, formalCoord, &(m1.x), &(m1.y) );
             }
 
-            resultCode = board_coord((*g).board, formalCoord, &(m1.x), &(m1.y) );
-        }
-
-        noStone = game_place_stone(g, m1.x, m1.y);
+            noStone = game_place_stone(g, m1.x, m1.y);
 
             if ( !noStone ) {
                 game_update(g);
             } else {
                 m1.stone = BLACK_STONE; 
             } 
+        } else {
+            printf("The game is stopped.");
+            printf("\n");
+            (*g).state = GAME_STATE_STOPPED;
+            result = false;
+            return result;
         }
 
     } else if ((*g).state == GAME_STATE_PLAYING && (*g).moves_count % 2 == 1) {
         (*g).stone = WHITE_STONE;
         printf("White stone's turn, please enter a move: ");
+
         if (scanf("%s", formalCoord) != EOF) {
-             if(strcmp(formalCoord, "EOF") == 0){
-                printf("The game is stopped.");
-                printf("\n");
-                (*g).state = GAME_STATE_STOPPED;
-                result = false;
-                return result;
-            }
-    
+            
         resultCode = board_coord((*g).board, formalCoord, &(m1.x), &(m1.y) );
      
-        while (resultCode == FORMAL_COORDINATE_ERR) {
-            printf("The coordinate you entered is invalid, please try again.\n");
-            printf("White stone's turn, please enter a move: ");
-            scanf("%s", formalCoord);
+            while (resultCode == FORMAL_COORDINATE_ERR) {
+                printf("The coordinate you entered is invalid, please try again.\n");
+                printf("White stone's turn, please enter a move: ");
+                scanf("%s", formalCoord);
 
-            if(strcmp(formalCoord, "EOF") == 0){
-                printf("The game is stopped.");
-                printf("\n");
-                (*g).state = GAME_STATE_STOPPED;
-                result = false;
-                return result;
+                resultCode = board_coord((*g).board, formalCoord, &(m1.x), &(m1.y) ); 
             }
 
-            resultCode = board_coord((*g).board, formalCoord, &(m1.x), &(m1.y) ); 
-        }
+            noStone = game_place_stone(g, m1.x, m1.y);
 
-        noStone = game_place_stone(g, m1.x, m1.y);
-
-        if ( !noStone ) {
-            printf("There is already a stone at the coordinate you entered, please try again.\n");
-            game_update(g);
+            if ( !noStone ) {
+                printf("There is already a stone at the coordinate you entered, please try again.\n");
+                game_update(g);
 
             } else {
                 m1.stone = WHITE_STONE;
             }
-        }
+
+        } else {
+                printf("The game is stopped.");
+                printf("\n");
+                (*g).state = GAME_STATE_STOPPED;
+                result = false;
+                return result;
+            }
     }
+
     return result;
   
 }

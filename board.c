@@ -49,9 +49,8 @@ board* board_create(size_t size)
             gridArray[i][j] = EMPTY_INTERSECTION;
            
         }
-      
     }
-    
+
     (*b1).size = size;
     
     (*b1).grid = *gridArray;
